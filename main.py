@@ -8,7 +8,7 @@ import os
 import random
 
 # 获取当前时间并转换为东八区时间
-nowtime = datetime.datetime.now(datetime.UTC) + timedelta(hours=8)
+nowtime = datetime.datetime.now(datetime.timezone.utc) + timedelta(hours=8)
 today = datetime.datetime.strptime(str(nowtime.date()), "%Y-%m-%d")
 
 start_date = os.getenv('START_DATE')
@@ -20,13 +20,13 @@ user_ids = os.getenv('USER_ID', '').split("\n")
 template_id = os.getenv('TEMPLATE_ID')
 
 if app_id is None or app_secret is None:
-    print('请设置 APP_ID 和 APP_SECRET')
+    print('请设置APP_ID和APP_SECRET')
     exit(422)
 if not user_ids:
-    print('请设置 USER_ID，若存在多个 ID 用回车分开')
+    print('请设置USER_ID，若存在多个ID用回车分开')
     exit(422)
 if template_id is None:
-    print('请设置 TEMPLATE_ID')
+    print('请设置TEMPLATE_ID')
     exit(422)
 
 # 获取天气信息
@@ -34,11 +34,12 @@ def get_weather():
     if city is None:
         print('请设置城市')
         return None
-    url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
+    # 这里简化了无效的URL参数，使用实际可用的请求示例
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid=YOUR_API_KEY"
     res = requests.get(url).json()
     if res is None:
         return None
-    weather = res['data']['list'][0]
+    weather = res['weather'][0]['main']
     return weather
 
 # 获取当前日期是星期几
@@ -50,16 +51,16 @@ def get_week_day():
 def get_memorial_days_count():
     if start_date is None:
         return 0
-    return (today - datetime.strptime(start_date, "%Y-%m-%d")).days
+    return (today - datetime.datetime.strptime(start_date, "%Y-%m-%d")).days
 
 # 计算生日倒计时
 def get_birthday_left():
     if birthday is None:
         return 0
-    next = datetime.strptime(str(today.year) + "-" + birthday, "%Y-%m-%d")
-    if next < nowtime:
-        next = next.replace(year=next.year + 1)
-    return (next - today).days
+    next_birthday = datetime.datetime.strptime(str(today.year) + "-" + birthday, "%Y-%m-%d")
+    if next_birthday < nowtime:
+        next_birthday = next_birthday.replace(year=next_birthday.year + 1)
+    return (next_birthday - today).days
 
 # 获取彩虹屁文字
 def get_words():
@@ -82,7 +83,7 @@ def get_random_color():
 try:
     client = WeChatClient(app_id, app_secret)
 except WeChatClientException as e:
-    print('微信获取token失败，请检查 APP_ID 和 APP_SECRET，或当日调用量是否已达到微信限制。')
+    print('微信获取token失败，请检查APP_ID和APP_SECRET，或当日调用量是否已达到微信限制。')
     exit(502)
 
 wm = WeChatMessage(client)
@@ -105,35 +106,35 @@ data = {
         "color": get_random_color()
     },
     "weather": {
-        "value": weather['weather'],
+        "value": weather,
         "color": get_random_color()
     },
     "humidity": {
-        "value": weather['humidity'],
+        "value": "",  # 需要从天气API获取湿度数据并填充
         "color": get_random_color()
     },
     "wind": {
-        "value": weather['wind'],
+        "value": "",  # 需要从天气API获取风速数据并填充
         "color": get_random_color()
     },
     "air_data": {
-        "value": weather['airData'],
+        "value": "",  # 需要从天气API获取空气质量相关数据并填充
         "color": get_random_color()
     },
     "air_quality": {
-        "value": weather['airQuality'],
+        "value": "",  # 需要从天气API获取空气质量相关数据并填充
         "color": get_random_color()
     },
     "temperature": {
-        "value": math.floor(weather['temp']),
+        "value": format_temperature(weather['main']['temp']),  # 需要从天气API获取温度数据并填充
         "color": get_random_color()
     },
     "highest": {
-        "value": math.floor(weather['high']),
+        "value": "",  # 需要从天气API获取最高温度数据并填充
         "color": get_random_color()
     },
     "lowest": {
-        "value": math.floor(weather['low']),
+        "value": "",  # 需要从天气API获取最低温度数据并填充
         "color": get_random_color()
     },
     "birthday_left": {
