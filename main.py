@@ -33,16 +33,32 @@ if template_id is None:
     print('请设置 TEMPLATE_ID')
     exit(422)
 
-# weather 直接返回对象，在使用的地方用字段进行调用。
+# 使用和风天气API获取天气信息
 def get_weather():
     if city is None:
         print('请设置城市')
         return None
-    url = f"http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city={city}"
+    
+    api_key = "d34f6dbb253a4d7cad0b776a35d68be2"  # 和风天气API密钥
+    url = f"https://devapi.qweather.com/v7/weather/now?location={city}&key={api_key}&lang=zh"
+    
     res = requests.get(url).json()
-    if res is None:
+    
+    # 检查API响应是否包含预期的字段
+    if res is None or res.get('code') != '200':
+        print('获取天气信息失败，请检查城市名称或API配置')
         return None
-    weather = res['data']['list'][0]
+    
+    weather = {
+        'weather': res['now']['text'],              # 天气描述
+        'temp': float(res['now']['temp']),          # 当前温度
+        'high': 'N/A',                              # 该接口没有最高温度数据，暂时留空
+        'low': 'N/A',                               # 该接口没有最低温度数据，暂时留空
+        'humidity': res['now']['humidity'],         # 湿度
+        'wind': res['now']['windSpeed'],            # 风速
+        'airData': 'N/A',                           # 该接口没有空气数据，暂时留空
+        'airQuality': 'N/A'                         # 该接口没有空气质量数据，暂时留空
+    }
     return weather
 
 # 获取当前日期为星期几
@@ -129,15 +145,15 @@ data = {
         "color": get_random_color()
     },
     "temperature": {
-        "value": math.floor(weather['temp']),
+        "value": weather['temp'],
         "color": get_random_color()
     },
     "highest": {
-        "value": math.floor(weather['high']),
+        "value": weather['high'],
         "color": get_random_color()
     },
     "lowest": {
-        "value": math.floor(weather['low']),
+        "value": weather['low'],
         "color": get_random_color()
     },
     "birthday_left": {
