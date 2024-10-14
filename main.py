@@ -177,7 +177,7 @@ data = {
     "lowest": {
         "value": f"{weather['low']}℃",
         "color": get_random_color()
-    }
+    },
     "birthday_left": {
         "value": get_birthday_left(),
         "color": get_random_color()
