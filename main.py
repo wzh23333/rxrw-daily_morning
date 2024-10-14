@@ -41,7 +41,10 @@ def get_weather():
         return None
     
     # 打印城市名称
-    print(f"请求的城市: {city}")
+def get_weather():
+    if city is None:
+        print('请设置城市')
+        return None
     
     api_key = "d34f6dbb253a4d7cad0b776a35d68be2"  # 和风天气API密钥
     url = f"https://devapi.qweather.com/v7/weather/now?location={city}&key={api_key}&lang=zh"
@@ -51,7 +54,6 @@ def get_weather():
     # 打印API响应以便调试
     print(f"API响应: {res}")
     
-    # 检查API响应是否包含预期的字段
     if res is None or res.get('code') != '200':
         print('获取天气信息失败，请检查城市名称或API配置')
         return None
@@ -59,14 +61,16 @@ def get_weather():
     weather = {
         'weather': res['now']['text'],              # 天气描述
         'temp': float(res['now']['temp']),          # 当前温度
-        'high': 'N/A',                              # 该接口没有最高温度数据，暂时留空
-        'low': 'N/A',                               # 该接口没有最低温度数据，暂时留空
+        'feels_like': float(res['now']['feelsLike']),  # 体感温度
         'humidity': res['now']['humidity'],         # 湿度
-        'wind': res['now']['windSpeed'],            # 风速
-        'airData': 'N/A',                           # 该接口没有空气数据，暂时留空
-        'airQuality': 'N/A'                         # 该接口没有空气质量数据，暂时留空
+        'wind': f"{res['now']['windDir']} {res['now']['windScale']}级",  # 风向和风力
+        'airData': 'N/A',                           # 和风天气免费版没有空气指数数据
+        'airQuality': 'N/A',                        # 和风天气免费版没有空气质量数据
+        'high': 'N/A',                              # 当前接口不包含最高气温数据
+        'low': 'N/A'                                # 当前接口不包含最低气温数据
     }
     return weather
+
 
 # 获取当前日期为星期几
 def get_week_day():
@@ -162,7 +166,7 @@ data = {
         "color": get_random_color()
     },
     "temperature": {
-        "value": weather['temp'],
+        "value": f"{weather['temp']}℃",  # 添加单位
         "color": get_random_color()
     },
     "highest": {
@@ -178,7 +182,7 @@ data = {
         "color": get_random_color()
     },
     "love_days": {
-        "value": get_memorial_days_count(),  # 计算相恋天数的函数
+        "value": get_memorial_days_count(),
         "color": get_random_color()
     },
     "words": {
@@ -186,7 +190,6 @@ data = {
         "color": get_random_color()
     },
 }
-
 
 if __name__ == '__main__':
     count = 0
