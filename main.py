@@ -76,10 +76,18 @@ def get_week_day():
 
 # 纪念日正数
 def get_memorial_days_count():
-    if start_date is None:
+    if not start_date:
         print('没有设置 START_DATE')
         return 0
-    delta = today - datetime.datetime.strptime(start_date, "%Y-%m-%d").date()
+
+    try:
+        # 尝试将 start_date 转换为日期对象
+        start_date_obj = datetime.datetime.strptime(start_date, "%Y-%m-%d").date()
+    except ValueError as e:
+        print(f"START_DATE 格式错误: {e}")
+        return 0
+
+    delta = today - start_date_obj
     return delta.days
 
 # 生日倒计时
