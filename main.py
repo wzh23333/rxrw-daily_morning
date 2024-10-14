@@ -40,34 +40,35 @@ def get_weather():
         print('请设置城市')
         return None
     
-    # 打印城市名称
-def get_weather():
-    if city is None:
-        print('请设置城市')
-        return None
-    
     api_key = "d34f6dbb253a4d7cad0b776a35d68be2"  # 和风天气API密钥
-    url = f"https://devapi.qweather.com/v7/weather/now?location={city}&key={api_key}&lang=zh"
-    
-    res = requests.get(url).json()
-    
-    # 打印API响应以便调试
-    print(f"API响应: {res}")
-    
-    if res is None or res.get('code') != '200':
-        print('获取天气信息失败，请检查城市名称或API配置')
+    # 当前天气API
+    current_url = f"https://devapi.qweather.com/v7/weather/now?location={city}&key={api_key}&lang=zh"
+    # 7天预报API
+    forecast_url = f"https://devapi.qweather.com/v7/weather/7d?location={city}&key={api_key}&lang=zh"
+
+    current_res = requests.get(current_url).json()
+    forecast_res = requests.get(forecast_url).json()
+
+    # 检查API响应
+    if current_res is None or current_res.get('code') != '200':
+        print('获取当前天气信息失败，请检查城市名称或API配置')
         return None
-    
+    if forecast_res is None or forecast_res.get('code') != '200':
+        print('获取天气预报信息失败，请检查城市名称或API配置')
+        return None
+
+    # 提取当天的最高和最低气温
+    today_forecast = forecast_res['daily'][0]  # 获取当天的预报数据
+
     weather = {
-        'weather': res['now']['text'],              # 天气描述
-        'temp': float(res['now']['temp']),          # 当前温度
-        'feels_like': float(res['now']['feelsLike']),  # 体感温度
-        'humidity': res['now']['humidity'],         # 湿度
-        'wind': f"{res['now']['windDir']} {res['now']['windScale']}级",  # 风向和风力
-        'airData': 'N/A',                           # 和风天气免费版没有空气指数数据
-        'airQuality': 'N/A',                        # 和风天气免费版没有空气质量数据
-        'high': 'N/A',                              # 当前接口不包含最高气温数据
-        'low': 'N/A'                                # 当前接口不包含最低气温数据
+        'weather': current_res['now']['text'],               # 天气描述
+        'temp': float(current_res['now']['temp']),           # 当前温度
+        'humidity': current_res['now']['humidity'],          # 湿度
+        'wind': f"{current_res['now']['windDir']} {current_res['now']['windScale']}级",  # 风向和风力
+        'airData': 'N/A',                                    # 和风天气免费版没有空气指数数据
+        'airQuality': 'N/A',                                 # 和风天气免费版没有空气质量数据
+        'high': today_forecast['tempMax'],                   # 最高气温
+        'low': today_forecast['tempMin']                     # 最低气温
     }
     return weather
 
@@ -170,13 +171,13 @@ data = {
         "color": get_random_color()
     },
     "highest": {
-        "value": weather['high'],
+        "value": f"{weather['high']}℃",
         "color": get_random_color()
     },
     "lowest": {
-        "value": weather['low'],
+        "value": f"{weather['low']}℃",
         "color": get_random_color()
-    },
+    }
     "birthday_left": {
         "value": get_birthday_left(),
         "color": get_random_color()
