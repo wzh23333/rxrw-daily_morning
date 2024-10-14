@@ -10,7 +10,8 @@ import random
 
 # nowtime = datetime.utcnow() + timedelta(hours=8)  # 东八区时间
 nowtime = datetime.datetime.now(datetime.UTC) + timedelta(hours=8)
-today = datetime.strptime(str(nowtime.date()), "%Y-%m-%d") #今天的日期
+today = datetime.datetime.strptime(str(nowtime.date()), "%Y-%m-%d")
+# today = datetime.strptime(str(nowtime.date()), "%Y-%m-%d") #今天的日期
 
 start_date = os.getenv('START_DATE')
 city = os.getenv('CITY')
