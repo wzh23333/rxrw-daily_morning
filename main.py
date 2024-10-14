@@ -1,4 +1,3 @@
-print("发送的数据：", data)
 import datetime
 from datetime import timedelta
 import math
@@ -198,6 +197,10 @@ data = {
     },
 }
 
+# 在发送消息之前打印数据字典
+print("发送的数据：", data)
+
+# 发送模板消息
 if __name__ == '__main__':
     count = 0
     try:
