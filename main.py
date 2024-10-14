@@ -115,10 +115,10 @@ def get_words():
             return word
         else:
             print(f"获取彩虹屁失败，状态码: {response.status_code}")
-            return "没有彩虹屁了"
+            return "没有彩虹屁了"  # 设置一个默认值
     except Exception as e:
         print(f"请求彩虹屁时出错: {e}")
-        return "没有彩虹屁了"
+        return "没有彩虹屁了"  # 设置一个默认值
 
 # 随机颜色
 def get_random_color():
@@ -192,8 +192,8 @@ data = {
         "color": get_random_color()
     },
     "words": {
-    "value": get_words(),
-    "color": "#FF0000"  # 直接设置为红色以测试
+        "value": get_words(),
+        "color": get_random_color()
     },
 }
 
