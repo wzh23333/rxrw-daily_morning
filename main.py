@@ -44,6 +44,9 @@ def get_weather():
     
     res = requests.get(url).json()
     
+    # 打印API响应以便调试
+    print(f"API响应: {res}")
+    
     # 检查API响应是否包含预期的字段
     if res is None or res.get('code') != '200':
         print('获取天气信息失败，请检查城市名称或API配置')
@@ -60,6 +63,7 @@ def get_weather():
         'airQuality': 'N/A'                         # 该接口没有空气质量数据，暂时留空
     }
     return weather
+
 
 # 获取当前日期为星期几
 def get_week_day():
