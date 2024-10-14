@@ -113,10 +113,10 @@ def get_words():
             return response.json()['data']['text']
         else:
             print(f"获取彩虹屁失败，状态码: {response.status_code}")
-            return "没有彩虹屁了"  # 可以设置一个默认值
+            return "没有彩虹屁了"  # 设置一个默认值
     except Exception as e:
         print(f"请求彩虹屁时出错: {e}")
-        return "没有彩虹屁了"  # 可以设置一个默认值
+        return "没有彩虹屁了"  # 设置一个默认值
 
 # 随机颜色
 import random
@@ -172,15 +172,15 @@ data = {
         "color": get_random_color()
     },
     "temperature": {
-        "value": f"{weather['temp']}℃",  # 当前温度
+        "value": f"{weather['temp']}℃",
         "color": get_random_color()
     },
     "highest": {
-        "value": f"{weather['high']}℃",  # 最高气温
+        "value": f"{weather['high']}℃",
         "color": get_random_color()
     },
     "lowest": {
-        "value": f"{weather['low']}℃",   # 最低气温
+        "value": f"{weather['low']}℃",
         "color": get_random_color()
     },
     "birthday_left": {
