@@ -169,11 +169,16 @@ data = {
         "value": get_birthday_left(),
         "color": get_random_color()
     },
+    "love_days": {
+        "value": get_memorial_days_count(),  # 计算相恋天数的函数
+        "color": get_random_color()
+    },
     "words": {
         "value": get_words(),
         "color": get_random_color()
     },
 }
+
 
 if __name__ == '__main__':
     count = 0
