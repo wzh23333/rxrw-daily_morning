@@ -12,7 +12,8 @@ nowtime = datetime.datetime.now(datetime.timezone.utc) + timedelta(hours=8)
 today = nowtime.date()
 
 start_date = os.getenv('START_DATE')
-city = os.getenv('CITY')
+#city = os.getenv('CITY')
+city = "101100201"  # 忻州市的行政区划代码
 birthday = os.getenv('BIRTHDAY')
 
 app_id = os.getenv('APP_ID')
