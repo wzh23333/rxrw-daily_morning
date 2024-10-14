@@ -110,17 +110,17 @@ def get_words():
     try:
         response = requests.get("https://api.shadiao.pro/chp")
         if response.status_code == 200:
-            return response.json()['data']['text']
+            word = response.json()['data']['text']
+            print(f"彩虹屁内容: {word}")  # 打印彩虹屁内容以调试
+            return word
         else:
             print(f"获取彩虹屁失败，状态码: {response.status_code}")
-            return "没有彩虹屁了"  # 设置一个默认值
+            return "没有彩虹屁了"
     except Exception as e:
         print(f"请求彩虹屁时出错: {e}")
-        return "没有彩虹屁了"  # 设置一个默认值
+        return "没有彩虹屁了"
 
 # 随机颜色
-import random
-
 def get_random_color():
     color = "#%06x" % random.randint(0, 0xFFFFFF)
     print(f"生成的随机颜色: {color}")  # 打印生成的随机颜色，用于调试
@@ -192,8 +192,8 @@ data = {
         "color": get_random_color()
     },
     "words": {
-        "value": get_words(),
-        "color": get_random_color()
+    "value": get_words(),
+    "color": "#FF0000"  # 直接设置为红色以测试
     },
 }
 
