@@ -1,3 +1,4 @@
+print("发送的数据：", data)
 import datetime
 from datetime import timedelta
 import math
