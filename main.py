@@ -192,9 +192,9 @@ data = {
         "color": get_random_color()
     },
     "words": {
-        "value": get_words(),
+        "value": "这是一个测试内容。",
         "color": get_random_color()
-    },
+},
 }
 
 # 在发送消息之前打印数据字典
