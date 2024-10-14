@@ -39,6 +39,9 @@ def get_weather():
         print('请设置城市')
         return None
     
+    # 打印城市名称
+    print(f"请求的城市: {city}")
+    
     api_key = "d34f6dbb253a4d7cad0b776a35d68be2"  # 和风天气API密钥
     url = f"https://devapi.qweather.com/v7/weather/now?location={city}&key={api_key}&lang=zh"
     
@@ -63,7 +66,6 @@ def get_weather():
         'airQuality': 'N/A'                         # 该接口没有空气质量数据，暂时留空
     }
     return weather
-
 
 # 获取当前日期为星期几
 def get_week_day():
