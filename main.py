@@ -107,18 +107,23 @@ def get_birthday_left():
 
 # 彩虹屁 接口不稳定，所以失败的话会重新调用，直到成功
 def get_words():
-    words = requests.get("https://api.shadiao.pro/chp")
-    if words.status_code != 200:
-        return get_words()
-    return words.json()['data']['text']
-
-def format_temperature(temperature):
-    return math.floor(temperature)
+    try:
+        response = requests.get("https://api.shadiao.pro/chp")
+        if response.status_code == 200:
+            return response.json()['data']['text']
+        else:
+            print(f"获取彩虹屁失败，状态码: {response.status_code}")
+            return "没有彩虹屁了"  # 可以设置一个默认值
+    except Exception as e:
+        print(f"请求彩虹屁时出错: {e}")
+        return "没有彩虹屁了"  # 可以设置一个默认值
 
 # 随机颜色
+import random
+
 def get_random_color():
     color = "#%06x" % random.randint(0, 0xFFFFFF)
-    print(f"生成的随机颜色: {color}")  # 输出调试信息
+    print(f"生成的随机颜色: {color}")  # 打印生成的随机颜色，用于调试
     return color
 
 try:
@@ -167,15 +172,15 @@ data = {
         "color": get_random_color()
     },
     "temperature": {
-        "value": f"{weather['temp']}℃",  # 添加单位
+        "value": f"{weather['temp']}℃",  # 当前温度
         "color": get_random_color()
     },
     "highest": {
-        "value": f"{weather['high']}℃",
+        "value": f"{weather['high']}℃",  # 最高气温
         "color": get_random_color()
     },
     "lowest": {
-        "value": f"{weather['low']}℃",
+        "value": f"{weather['low']}℃",   # 最低气温
         "color": get_random_color()
     },
     "birthday_left": {
